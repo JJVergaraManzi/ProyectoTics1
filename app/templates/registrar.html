@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="en">
+{%if alerta == "Rut ya utilizado" %}
+<div class="alert alert-danger">
+  <strong>{{alerta}}</strong> intente de nuevo.
+</div>
+{%elif alerta == "Usuario Creado!!" %}
+<div class="alert alert-danger">
+  <strong>{{alerta}}</strong> Felicidades!
+</div>
+{%elif alerta == "Rut invalido" %}
+<div class="alert alert-danger">
+  <strong>{{alerta}}</strong> intente de nuevo.
+</div>
+{%elif alerta == "" %}
+{%endif%}
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Pagina de registo</title>
+
+    <!-- Bootstrap core CSS-->
+    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template-->
+    <link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template-->
+    <link href="static/css/sb-admin.css" rel="stylesheet">
+  </head>
+
+  <body class="bg-dark">
+
+    <div class="container">
+      <div class="card card-register mx-auto mt-5">
+        <div class="card-header">Registrese</div>
+        <div class="card-body">
+          <form action="register" method="POST">
+            <div class="form-group">
+              <div class="form-row">
+                <div class="col-md-6">
+                  <div class="form-label-group">
+                    <input type="text" id="nombre" class="form-control" placeholder="Nombre" name="nombre"required="required" autofocus="autofocus">
+                    <label for="nombre">Nombre</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-label-group">
+                    <input type="text" id="apellido" class="form-control" name="apellido" placeholder="Apellido" required="required">
+                    <label for="apellido">Apellido</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-label-group">
+                <input type="text" id="rut" class="form-control" placeholder="Rut" required="required">
+                <label for="rut">Rut</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="col-md-6">
+                  <div class="form-label-group">
+                    <input type="password" id="psw" class="form-control" name="psw" placeholder="Contrasena" required="required">
+                    <label for="psw">Contrasena</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="button button-block"/>Ingresar</button>
+          </form>
+          <div class="text-center">
+            <a class="d-block small mt-3" href="/login">Iniciar sesion</a
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix">
+    </div>
+    <script>
+    function checkRut(rut) {
+      // Despejar Puntos
+      var valor = rut.value.replace('.','');
+      // Despejar Guión
+      valor = valor.replace('-','');
+      // Aislar Cuerpo y Dígito Verificador
+      cuerpo = valor.slice(0,-1);
+      dv = valor.slice(-1).toUpperCase();
+      // Formatear RUN
+      rut.value = cuerpo + '-'+ dv
+      // Si no cumple con el mínimo ej. (n.nnn.nnn)
+      if(cuerpo.length < 7) { rut.setCustomValidity("RUT Incompleto"); return false;}
+      // Calcular Dígito Verificador
+      suma = 0;
+      multiplo = 2;
+      // Para cada dígito del Cuerpo
+      for(i=1;i<=cuerpo.length;i++) {
+        // Obtener su Producto con el Múltiplo Correspondiente
+        index = multiplo * valor.charAt(cuerpo.length - i);
+        // Sumar al Contador General
+        suma = suma + index;
+        // Consolidar Múltiplo dentro del rango [2,7]
+        if(multiplo < 7) { multiplo = multiplo + 1; } else { multiplo = 2; }
+      }
+      // Calcular Dígito Verificador en base al Módulo 11
+      dvEsperado = 11 - (suma % 11);
+      // Casos Especiales (0 y K)
+      dv = (dv == 'K')?10:dv;
+      dv = (dv == 0)?11:dv;
+      // Validar que el Cuerpo coincide con su Dígito Verificador
+      if(dvEsperado != dv) { rut.setCustomValidity("RUT Inválido"); return false; }
+      // Si todo sale bien, eliminar errores (decretar que es válido)
+      rut.setCustomValidity('');
+    }
+    </script>
+  </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="static/vendor/jquery/jquery.min.js"></script>
+    <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  </body>
+
+</html>
